@@ -4,15 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cal Disney</title>
-    <link
-      rel="preconnect"
-      href="https://fonts.googleapis.com"
-    />
-    <link
-      rel="preconnect"
-      href="https://fonts.gstatic.com"
-      crossorigin
-    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Nunito:wght@400;600&display=swap"
       rel="stylesheet"
@@ -22,6 +15,10 @@
         --bg: #f8f1e4;
         --accent-red: #e4002b;
         --accent-blue: #006db7;
+        --console-green: #66ffcc;
+        --console-amber: #ffb55a;
+        --console-deep: #0a1826;
+        --console-blue: #2c7ac2;
       }
 
       * {
@@ -42,6 +39,13 @@
         color: #1f2d3d;
       }
 
+      .app {
+        width: min(1080px, 92vw);
+        margin: 0 auto;
+        display: grid;
+        gap: 32px;
+      }
+
       .title {
         text-align: center;
         line-height: 1.2;
@@ -60,12 +64,357 @@
         font-weight: 700;
         color: var(--accent-blue);
       }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 14px;
+        font-weight: 700;
+        background: rgba(0, 109, 183, 0.1);
+        color: var(--accent-blue);
+      }
+
+      .status-pill span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .online-view {
+        display: none;
+        background: linear-gradient(135deg, #09131b, #0e2331 45%, #0f2a3f);
+        border-radius: 26px;
+        padding: 28px;
+        color: #e6f4ff;
+        box-shadow: 0 24px 50px rgba(5, 14, 22, 0.45);
+        border: 1px solid rgba(102, 255, 204, 0.2);
+      }
+
+      .online-view.active {
+        display: grid;
+        gap: 22px;
+      }
+
+      .offline-view.hidden {
+        display: none;
+      }
+
+      .console-header {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1.4px;
+      }
+
+      .console-header h2 {
+        margin: 0;
+        font-size: 22px;
+        color: var(--console-green);
+      }
+
+      .console-status {
+        display: flex;
+        gap: 16px;
+        font-size: 12px;
+        color: rgba(230, 244, 255, 0.7);
+      }
+
+      .status-card {
+        padding: 10px 14px;
+        border-radius: 12px;
+        border: 1px solid rgba(102, 255, 204, 0.25);
+        background: rgba(7, 20, 30, 0.7);
+      }
+
+      .console-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
+      }
+
+      .feed-card {
+        border-radius: 20px;
+        padding: 16px;
+        background: rgba(12, 26, 38, 0.8);
+        border: 1px solid rgba(255, 181, 90, 0.3);
+      }
+
+      .feed-card h3 {
+        margin: 0 0 12px;
+        color: var(--console-amber);
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+      }
+
+      .feed-window {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        border-radius: 16px;
+        background: #000;
+        border: 2px solid rgba(102, 255, 204, 0.35);
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        color: rgba(230, 244, 255, 0.5);
+        font-size: 14px;
+      }
+
+      .feed-window img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .control-panel {
+        border-radius: 20px;
+        padding: 16px;
+        background: rgba(12, 26, 38, 0.85);
+        border: 1px solid rgba(44, 122, 194, 0.4);
+        display: grid;
+        gap: 16px;
+      }
+
+      .control-panel h3 {
+        margin: 0;
+        color: #8fd2ff;
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+      }
+
+      .control-grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .control-grid .row {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .control-grid button,
+      .dance-grid button {
+        padding: 12px 10px;
+        border-radius: 12px;
+        border: 1px solid rgba(102, 255, 204, 0.4);
+        background: rgba(7, 20, 30, 0.8);
+        color: #e6f4ff;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.2s ease, border 0.2s ease;
+      }
+
+      .control-grid button:hover,
+      .dance-grid button:hover {
+        transform: translateY(-1px);
+        border-color: rgba(255, 181, 90, 0.7);
+      }
+
+      .dance-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+      }
+
+      .range-control {
+        display: grid;
+        gap: 8px;
+        font-size: 14px;
+      }
+
+      .range-control input[type="range"] {
+        width: 100%;
+      }
+
+      .console-footer {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        font-size: 12px;
+        color: rgba(230, 244, 255, 0.55);
+      }
+
+      .console-footer strong {
+        color: var(--console-green);
+      }
     </style>
   </head>
   <body>
-    <div class="title">
-      <h1>Cal Disney</h1>
-      <p>4-year-old Master Lego Builder</p>
-    </div>
+    <main class="app">
+      <section class="offline-view" id="offlineView">
+        <div class="title">
+          <h1>Cal Disney</h1>
+          <p>4-year-old Master Lego Builder</p>
+        </div>
+      </section>
+
+      <section class="online-view" id="onlineView">
+        <div class="console-header">
+          <div>
+            <h2>Apollo Control Console</h2>
+            <div class="console-status">
+              <div class="status-card">Signal: <strong id="signalStatus">LOCKED</strong></div>
+              <div class="status-card">Channel: <strong id="channelLabel">ESP32-CAM</strong></div>
+            </div>
+          </div>
+          <div class="status-pill">
+            <span></span>
+            <strong>Live feed engaged</strong>
+          </div>
+        </div>
+
+        <div class="console-grid">
+          <div class="feed-card">
+            <h3>Optics relay</h3>
+            <div class="feed-window" id="feedWindow">
+              <span>Awaiting camera stream...</span>
+            </div>
+          </div>
+
+          <div class="control-panel">
+            <h3>Mobility vector</h3>
+            <div class="control-grid">
+              <div class="row">
+                <button data-command="left">⟲ Pivot</button>
+                <button data-command="forward">▲ Forward</button>
+                <button data-command="right">⟳ Pivot</button>
+              </div>
+              <div class="row">
+                <button data-command="stop">■ Stop</button>
+                <button data-command="backward">▼ Reverse</button>
+                <button data-command="center">◎ Neutral</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="control-panel">
+            <h3>Dance deck</h3>
+            <div class="dance-grid">
+              <button data-command="dance-wave">Lunar Wave</button>
+              <button data-command="dance-bounce">Gravity Bounce</button>
+              <button data-command="dance-shimmy">Command Shimmy</button>
+              <button data-command="dance-spin">Orbit Spin</button>
+            </div>
+          </div>
+
+          <div class="control-panel">
+            <h3>Head rotation</h3>
+            <div class="range-control">
+              <label for="headRange">Pan optics (±45°)</label>
+              <input id="headRange" type="range" min="-45" max="45" value="0" />
+              <div>Offset: <strong id="headValue">0°</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="console-footer">
+          <div>Mission status: <strong>Nominal</strong></div>
+          <div>Robot ID: <strong id="robotId">BIPED-01</strong></div>
+          <div>Feed source: <strong id="feedSource">--</strong></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const offlineView = document.getElementById("offlineView");
+      const onlineView = document.getElementById("onlineView");
+      const feedWindow = document.getElementById("feedWindow");
+      const signalStatus = document.getElementById("signalStatus");
+      const channelLabel = document.getElementById("channelLabel");
+      const feedSource = document.getElementById("feedSource");
+      const headRange = document.getElementById("headRange");
+      const headValue = document.getElementById("headValue");
+
+      const state = {
+        host: "esp32cam.local",
+        connected: false,
+      };
+
+      const switchToOnline = () => {
+        offlineView.classList.add("hidden");
+        onlineView.classList.add("active");
+      };
+
+      const switchToOffline = () => {
+        onlineView.classList.remove("active");
+        offlineView.classList.remove("hidden");
+      };
+
+      const buildUrl = (path) => `http://${state.host}${path}`;
+
+      const checkStatus = async () => {
+        try {
+          const response = await fetch(buildUrl("/status"), { cache: "no-store" });
+          if (!response.ok) {
+            throw new Error("Status not ok");
+          }
+          const data = await response.json();
+          signalStatus.textContent = data.status?.toUpperCase() || "LOCKED";
+          channelLabel.textContent = state.host;
+          feedSource.textContent = state.host;
+          state.connected = true;
+          switchToOnline();
+          startStream();
+        } catch (error) {
+          state.connected = false;
+          switchToOffline();
+        }
+      };
+
+      const startStream = () => {
+        feedWindow.innerHTML = "";
+        const img = document.createElement("img");
+        img.alt = "ESP32-CAM live feed";
+        img.src = buildUrl("/stream");
+        img.addEventListener("error", () => {
+          feedWindow.innerHTML = "<span>Stream lost. Reconnecting...</span>";
+          state.connected = false;
+          switchToOffline();
+        });
+        feedWindow.appendChild(img);
+      };
+
+      const sendCommand = async (command, value) => {
+        if (!state.connected) {
+          return;
+        }
+        const params = new URLSearchParams({ command });
+        if (typeof value !== "undefined") {
+          params.set("value", String(value));
+        }
+        await fetch(buildUrl("/command"), {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: params.toString(),
+        });
+      };
+
+      document.querySelectorAll("button[data-command]").forEach((button) => {
+        button.addEventListener("click", () => {
+          sendCommand(button.dataset.command);
+        });
+      });
+
+      headRange.addEventListener("input", (event) => {
+        const offset = Number(event.target.value);
+        headValue.textContent = `${offset}°`;
+        sendCommand("head", offset);
+      });
+
+      checkStatus();
+      setInterval(checkStatus, 8000);
+    </script>
   </body>
 </html>
