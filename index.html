@@ -65,6 +65,47 @@
         color: var(--accent-blue);
       }
 
+      .connect-panel {
+        margin: 24px auto 0;
+        padding: 18px 22px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.7);
+        box-shadow: 0 12px 28px rgba(31, 45, 61, 0.12);
+        display: grid;
+        gap: 12px;
+        max-width: 520px;
+      }
+
+      .connect-panel label {
+        font-weight: 700;
+        color: #1f2d3d;
+      }
+
+      .connect-panel input {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 2px solid rgba(31, 45, 61, 0.2);
+        font-size: 16px;
+      }
+
+      .connect-panel button {
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: none;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        background: var(--accent-blue);
+        color: #fff;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .connect-panel button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 18px rgba(0, 109, 183, 0.25);
+      }
+
       .status-pill {
         display: inline-flex;
         align-items: center;
@@ -256,6 +297,24 @@
           <h1>Cal Disney</h1>
           <p>4-year-old Master Lego Builder</p>
         </div>
+        <div class="connect-panel">
+          <div class="status-pill" id="statusPill">
+            <span></span>
+            <strong>ESP32-CAM offline</strong>
+          </div>
+          <label for="deviceHost">ESP32-CAM address (same Wi-Fi)</label>
+          <input
+            id="deviceHost"
+            type="text"
+            placeholder="esp32cam.local or 192.168.1.42"
+            autocomplete="off"
+          />
+          <button id="connectBtn" type="button">Connect to robot feed</button>
+          <small>
+            If you are viewing this site over HTTPS, your browser may block the camera stream served over HTTP.
+            Open this page via HTTP on your local network for the live feed.
+          </small>
+        </div>
       </section>
 
       <section class="online-view" id="onlineView">
@@ -328,6 +387,9 @@
     <script>
       const offlineView = document.getElementById("offlineView");
       const onlineView = document.getElementById("onlineView");
+      const statusPill = document.getElementById("statusPill");
+      const deviceHostInput = document.getElementById("deviceHost");
+      const connectBtn = document.getElementById("connectBtn");
       const feedWindow = document.getElementById("feedWindow");
       const signalStatus = document.getElementById("signalStatus");
       const channelLabel = document.getElementById("channelLabel");
@@ -336,8 +398,15 @@
       const headValue = document.getElementById("headValue");
 
       const state = {
-        host: "esp32cam.local",
+        host: localStorage.getItem("esp32Host") || "esp32cam.local",
         connected: false,
+      };
+
+      deviceHostInput.value = state.host;
+
+      const setStatus = (text, color) => {
+        statusPill.querySelector("strong").textContent = text;
+        statusPill.style.color = color;
       };
 
       const switchToOnline = () => {
@@ -362,11 +431,13 @@
           signalStatus.textContent = data.status?.toUpperCase() || "LOCKED";
           channelLabel.textContent = state.host;
           feedSource.textContent = state.host;
+          setStatus("ESP32-CAM online", "var(--accent-blue)");
           state.connected = true;
           switchToOnline();
           startStream();
         } catch (error) {
           state.connected = false;
+          setStatus("ESP32-CAM offline", "var(--accent-red)");
           switchToOffline();
         }
       };
@@ -400,6 +471,16 @@
           body: params.toString(),
         });
       };
+
+      connectBtn.addEventListener("click", () => {
+        const host = deviceHostInput.value.trim();
+        if (!host) {
+          return;
+        }
+        state.host = host;
+        localStorage.setItem("esp32Host", host);
+        checkStatus();
+      });
 
       document.querySelectorAll("button[data-command]").forEach((button) => {
         button.addEventListener("click", () => {
